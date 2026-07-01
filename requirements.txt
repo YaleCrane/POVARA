@@ -1,0 +1,4 @@
+pandas>=2.0.0
+pymc>=0.15.0
+arvis>=0.15.0
+pytest
