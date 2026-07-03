@@ -78,12 +78,12 @@ def plot_anomalies(df, vendor_names):
     plt.figure(figsize=(10,6))
 
     # scatter plot: Actual Cost vs Vendor
-    sns.stripplot(data=df, x = 'Vendor_#', y = 'Actual_Cost', hue='Is_Anomoly',
-                  pallette={True: 'red', False: 'blue'}, jitter=True)
+    sns.stripplot(data=df, x = 'Vendor_#', y = 'Actual_Cost', hue='Is_Anomaly',
+                  palette={True: 'red', False: 'blue'}, jitter=True)
 
-    plt.tite("Vendor Cost Distribution & Detected Anomolies")
+    plt.title("Vendor Cost Distribution & Detected Anomalies")
     plt.ylabel("Actual Cost ($)")
-    plt.savefig('data/anomaly_report/png')
+    plt.savefig('data/anomaly_report.png')
     print("\n[!] Visualization saved to 'data/anomaly_report.png")
 
 if __name__== "__main__":
