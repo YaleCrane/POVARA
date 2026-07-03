@@ -1,8 +1,12 @@
 """
 Bayesian hierarchical model to predict expected costs for purchase orders
 
+to active environment, go to root and do:
+
+source .venv/bin/activate
+
 go to root and run:
-    python -m src.model
+python -m src.model
 
 """
 
@@ -72,7 +76,8 @@ if __name__== "__main__":
     from src.pipeline import load_povar_data, triage_audit, find_billing_silence
 
     # 1. Load the Triage to filter data
-    df = load_povar_data('data/raw_variances.csv')
+    # df = load_povar_data('data/raw_variances.csv')
+    df = load_povar_data('data/expanded_variances.csv')
     df = triage_audit(df)
     
     # 2. Build the model (Bayesian Analysis)
@@ -85,7 +90,7 @@ if __name__== "__main__":
 
     # 4. Comprehensive Audit Report
     silence_df = find_billing_silence(df)
-    # generate_audit_report(df, silence_df)
+    generate_audit_report(df, silence_df)
 
     # 5. Final Actionable List (Focus)
     print("\n--- FINAL ACTIONABLE AUDIT LIST (High-Risk) ---")
