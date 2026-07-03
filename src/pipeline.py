@@ -48,6 +48,41 @@ def load_povar_data(file_path: str) -> pd.DataFrame:
         logger.error(f"Pipeline failure: {e}")
         raise
 
+def triage_audit(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Applies filters to data before sending to the model for ML analysis
+    """
+
+    df['Audit_Action'] = 'Review'
+
+    # If variance is small, mark as AUTO_RECONCILED
+    mask = df['Variance_Amount'].abs() < 250
+    df.loc[mask, 'Audit_Action'] = 'AUTO_RECONCILED'
+
+    logger.info(f"Triage complete: {len(df[df['Audit_Action'] == 'AUTO_RECONCILED'])} lines auto-reconciled")
+    
+    return df
+
+def find_billing_silence(df: pd.DataFrame, threshold_days: int = 14) -> pd.DataFrame:
+    """
+    Flags items that have not been invoided within the vendors average lag time.
+    """
+
+    # find line where Invoice_Date is missing
+    open_lines = df[df['Invoice_Date'].isna()].copy()
+
+    # calculate days since receipt
+    today = pd.Timestamp('2026-07-03')
+    open_lines['Days_Open'] = (today - open_lines['Receipt_Date']).dt.days
+
+    # Flag lines open longer than threshold
+    open_lines["Is_Billing_Silence"] = open_lines['Days_Open'] > threshold_days
+
+    return open_lines
+
+
+
+
 if __name__ == "__main__":
     # Test block to verify pipeline
     try:
