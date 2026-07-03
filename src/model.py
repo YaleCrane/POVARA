@@ -15,7 +15,7 @@ import arviz as az
 import matplotlib.pyplot as plt
 import seaborn as sns
 
-def build_anomoly_model(df):
+def build_anomaly_model(df):
     
     vendors = df['Vendor_#'].astype('category')
     vendor_index = vendors.cat.codes.values
@@ -37,9 +37,9 @@ def build_anomoly_model(df):
 
     return trace, vendors.cat.categories
 
-def get_anomoly_scores(trace, df):
+def get_anomaly_scores(trace, df):
     # find prob that an actual cost is an outlier based on learned vendor paramaters
-    # transforms 'trace' into a simple 0-100% anomoly alert
+    # transforms 'trace' into a simple 0-100% anomaly alert
     
     #get learned means and std deviations for each vendor, store in 'trace' object
     mu_samples = trace.posterior['vendor_mu'].values.mean(axis=(0, 1))
@@ -96,8 +96,8 @@ if __name__== "__main__":
     df = triage_audit(df)
     
     # 2. Build the model (Bayesian Analysis)
-    trace, vendor_names = build_anomoly_model(df)
-    df = get_anomoly_scores(trace, df)
+    trace, vendor_names = build_anomaly_model(df)
+    df = get_anomaly_scores(trace, df)
 
     plot_anomalies(df, vendor_names)
 
