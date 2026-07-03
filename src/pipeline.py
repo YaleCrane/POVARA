@@ -65,14 +65,16 @@ def triage_audit(df: pd.DataFrame) -> pd.DataFrame:
 
 def find_billing_silence(df: pd.DataFrame, threshold_days: int = 14) -> pd.DataFrame:
     """
-    Flags items that have not been invoided within the vendors average lag time.
+    Flags items that have not been invoiced within the vendors average lag time.
     """
 
     # find line where Invoice_Date is missing
     open_lines = df[df['Invoice_Date'].isna()].copy()
 
     # calculate days since receipt
-    today = pd.Timestamp('2026-07-03')
+    # today = pd.Timestamp('2026-07-03')
+    today = pd.Timestamp.now()
+
     open_lines['Days_Open'] = (today - open_lines['Receipt_Date']).dt.days
 
     # Flag lines open longer than threshold
