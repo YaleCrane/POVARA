@@ -5,6 +5,7 @@ python -m src.pipeline.py
 
 import pandas as pd
 import logging
+import numpy as np
 
 # Configure logging for audit trails
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -50,16 +51,27 @@ def load_povar_data(file_path: str) -> pd.DataFrame:
 
 def triage_audit(df: pd.DataFrame) -> pd.DataFrame:
     """
-    Applies filters to data before sending to the model for ML analysis
+    Applies filters to data:
+    1. Percentage Tolerance (5%)
+    2. Fixed Materiality ($250)
     """
-
     df['Audit_Action'] = 'Review'
 
-    # If variance is small, mark as AUTO_RECONCILED
-    mask = df['Variance_Amount'].abs() < 250
-    df.loc[mask, 'Audit_Action'] = 'AUTO_RECONCILED'
+    # 1. Percentage Tolerance (5%)
+    # Use fillna(0) to ensure we don't divide by zero if Expected_Cost is 0
+    tolerance = 0.05
+    pct_variance = (df['Variance_Amount'].abs() / df['Expected_Cost'].replace(0, np.nan))
+    
+    # Flag items within 5% tolerance
+    mask_pct = pct_variance <= tolerance
+    
+    # 2. Fixed Materiality ($250)
+    mask_fixed = df['Variance_Amount'].abs() < 250
+    
+    # If it meets EITHER criteria, auto-reconcile
+    df.loc[mask_pct | mask_fixed, 'Audit_Action'] = 'AUTO_RECONCILED'
 
-    logger.info(f"Triage complete: {len(df[df['Audit_Action'] == 'AUTO_RECONCILED'])} lines auto-reconciled")
+    logger.info(f"Triage complete: {len(df[df['Audit_Action'] == 'AUTO_RECONCILED'])} lines auto-reconciled (5% tolerance or <$250)")
     
     return df
 
