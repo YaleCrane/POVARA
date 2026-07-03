@@ -12,6 +12,8 @@ python -m src.model
 
 import pymc as pm
 import arviz as az
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def build_anomoly_model(df):
     
@@ -24,7 +26,7 @@ def build_anomoly_model(df):
         # Hierarchial priors, learn the behavior of each vendor
         # the model learns to be 'lenient; with messy vendors', 'strict' with consistent vendors        vendor_index = df['Vendor_#'].astype('category').cat.codes.values
 
-        # definie the liklihood of the cost
+        # define the liklihood of the cost
         vendor_mu = pm.Normal('vendor_mu', mu= df['Expected_Cost'].mean(), sigma = 100, shape=num_vendors)
         vendor_sigma = pm.HalfNormal('vendor_sigma', sigma = 50, shape=num_vendors)
 
@@ -71,6 +73,19 @@ def generate_audit_report(df, silence_df):
     for _, row in silence_anomalies.iterrows():
         print(f"[!] BILLING SILENCE: PO {row['PO_#']} | Open for {row['Days_Open']} days.")
 
+# visualizer
+def plot_anomalies(df, vendor_names):
+    plt.figure(figsize=(10,6))
+
+    # scatter plot: Actual Cost vs Vendor
+    sns.stripplot(data=df, x = 'Vendor_#', y = 'Actual_Cost', hue='Is_Anomoly',
+                  pallette={True: 'red', False: 'blue'}, jitter=True)
+
+    plt.tite("Vendor Cost Distribution & Detected Anomolies")
+    plt.ylabel("Actual Cost ($)")
+    plt.savefig('data/anomaly_report/png')
+    print("\n[!] Visualization saved to 'data/anomaly_report.png")
+
 if __name__== "__main__":
     import pandas as pd
     from src.pipeline import load_povar_data, triage_audit, find_billing_silence
@@ -83,6 +98,9 @@ if __name__== "__main__":
     # 2. Build the model (Bayesian Analysis)
     trace, vendor_names = build_anomoly_model(df)
     df = get_anomoly_scores(trace, df)
+
+    plot_anomalies(df, vendor_names)
+
 
     # 3. Statastics (Technical Sanity Check)
     print("\n--- MODEL PARAMTER SUMMARY ---")
