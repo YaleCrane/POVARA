@@ -4,7 +4,7 @@
 
 **POVAR Sentinel** is a hybrid audit automation system designed to streamline the reconciliation of high-volume procurement transactions. It intelligently combines rule-based financial controls with probabilistic Bayesian modeling to detect pricing anomalies, auto-reconcile low-risk items, and flag operational bottlenecks.
 
-By reducing manual review workload while maintaining strong audit standards, POVAR demonstrates a practical application of data science in financial controls and procurement operations.
+By reducing manual review workload while maintaining strong audit standards, this system demonstrates a practical application of data science in financial controls and procurement operations.
 
 ## Key Features
 
