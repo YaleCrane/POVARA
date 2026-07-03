@@ -75,26 +75,25 @@ if __name__== "__main__":
     df = load_povar_data('data/raw_variances.csv')
     df = triage_audit(df)
     
-    # 2. Build the model
+    # 2. Build the model (Bayesian Analysis)
     trace, vendor_names = build_anomoly_model(df)
     df = get_anomoly_scores(trace, df)
 
-    # 3. Statastics
+    # 3. Statastics (Technical Sanity Check)
     print("\n--- MODEL PARAMTER SUMMARY ---")
     print(az.summary(trace))
 
-    # # 4. Actionable Audit List
-    print("\n--- ACTIONABLE AUDIT LIST ---")
-    to_review = df[df['Audit_Action'] == 'Review']
+    # 4. Comprehensive Audit Report
+    silence_df = find_billing_silence(df)
+    # generate_audit_report(df, silence_df)
+
+    # 5. Final Actionable List (Focus)
+    print("\n--- FINAL ACTIONABLE AUDIT LIST (High-Risk) ---")
+    # to_review = df[df['Audit_Action'] == 'Review']
+    to_review = df[(df['Audit_Action'] == 'Review') & (df['Is_Anomaly'] == True)]
 
     if not to_review.empty:
         # Displaying the POs that need manual human attention
-        print(to_review[['PO_#', 'Vendor_#', 'Anomaly_Score', 'Is_Anomaly']])
+        print(to_review[['PO_#', 'Vendor_#', 'Component_Type', 'Anomaly_Score', 'Is_Anomaly']])
     else:
         print("No high-risk anomalies found")
-
-    # 5. Find billing silence
-    silence_df = find_billing_silence(df)
-
-    # 6. Generate report
-    generate_audit_report(df, silence_df)
