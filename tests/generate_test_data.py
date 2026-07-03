@@ -25,8 +25,8 @@ def generate_test_data(n=100):
         'PO_#': [f'PO{1000+i}' for i in range(n)],
         'Vendor_#': np.random.choice(vendors, n),
         'Component_Type': np.random.choice(components, n),
-        'Expected_Cost': np.random.uniform(100, 2000, n),
-        'Actual_Cost': np.random.uniform(100, 2000, n),
+        'Expected_Cost': np.round(np.random.uniform(100, 2000, n),2),
+        'Actual_Cost': np.round(np.random.uniform(100, 2000, n),2),
         'Receipt_Date': pd.to_datetime('2026-06-01') + pd.to_timedelta(np.random.randint(0, 30, n), unit='D')
     }
     # Randomly introduce missing invoices
