@@ -1,6 +1,6 @@
 """
 go to root and run:
-    python -m src.pipeline.py
+python -m src.pipeline.py
 """
 
 import pandas as pd
