@@ -1,26 +1,49 @@
-# POVAR Sentinel: Automated Audit & Anomaly Detection
+# POVAR Sentinel: Automated Purchase Order Variance Audit & Anomaly Detection
 
-## Overview
-POVAR (Purchase Order Variance Audit & Reconciliation) is a hybrid automated audit system designed to streamline the reconciliation of high-volume procurement transactional data. By combining rule-based financial controls with probabilistic machine learning, the system automates triage and flags systemic pricing risks, significantly reducing manual auditor intervention.
+![POVAR Dashboard](data/anomaly_report.png)
 
+**POVAR Sentinel** is a hybrid audit automation system designed to streamline the reconciliation of high-volume procurement transactions. It intelligently combines rule-based financial controls with probabilistic Bayesian modeling to detect pricing anomalies, auto-reconcile low-risk items, and flag operational bottlenecks.
 
+By reducing manual review workload while maintaining strong audit standards, POVAR demonstrates a practical application of data science in financial controls and procurement operations.
 
-## Core Features
-* **Materiality-Based Triage:** Automatically reconciles low-variance transactions (< $250) to filter "noise" and prioritize high-risk items.
-* **Bayesian Anomaly Detection:** Utilizes a hierarchical Bayesian model (built with `PyMC`) to learn vendor-specific pricing behaviors and flag statistically significant cost outliers (Z-score > 2.0).
-* **Operational Sentinel:** Monitors for "Billing Silence"—a custom logic gate that identifies stalled or missing invoices, flagging potential process bottlenecks.
-* **Data Quality Gate:** Enforces a rigid schema to ensure only high-integrity data enters the analytic pipeline.
+## Key Features
 
-## Technical Stack
-* **Modeling:** Python, PyMC, ArviZ (Bayesian inference).
-* **Data Processing:** Pandas, NumPy (Data cleaning, feature engineering).
-* **Audit Logic:** Custom triage algorithms based on federal excise tax and inventory variance standards.
-* **Development:** Modular, branching architecture designed for production-grade audit trails.
+- **Materiality-Based Triage**: Automatically reconciles low-variance transactions (**±$250**) to eliminate noise and focus auditor attention on high-risk items.
+- **Hierarchical Bayesian Anomaly Detection**: Built with PyMC to learn vendor-specific pricing behaviors and flag statistically significant outliers (Z-score > 2.0).
+- **Billing Silence Monitoring**: Identifies stalled or missing invoices with configurable operational thresholds.
+- **Data Quality Gate**: Enforces strict schema validation and comprehensive audit logging.
+- **Actionable Insights**: Generates prioritized reports with severity scoring and rich visualizations.
+
+## Tech Stack
+
+- **Bayesian Modeling**: PyMC, ArviZ
+- **Data Pipeline**: Pandas, NumPy
+- **Visualization**: Seaborn, Matplotlib, Plotly
+- **Other**: Python, logging, synthetic data generation
+
+## Project Highlights
+
+- Developed a **hierarchical Bayesian model** that adapts to individual vendor pricing variability.
+- Designed an end-to-end production-style pipeline with automated triage and reporting.
+- Created a multi-panel analytical dashboard that visualizes both statistical anomalies and business materiality rules.
+- Built a flexible synthetic data generator for testing and demonstration.
+
+## Dashboard Preview
+
+The visualization below showcases:
+- Cost distributions and detected anomalies by vendor
+- Variance analysis with clear **±$250 materiality thresholds**
+- Anomaly score distribution
+- Breakdown by component type
+
+![POVAR Analytics Dashboard](data/anomaly_report.png)
 
 ## Project Structure
+
 ```text
 POVAR/
-├── data/               # Transactional datasets
-├── src/                # Core pipeline, model architecture, and reporting
-├── tests/              # Synthetic data generation and validation scripts
-└── .venv/              # Environment dependencies POVAR variance finder
+├── data/                    # Datasets and generated visualizations
+├── src/                     # Core pipeline, Bayesian model, and reporting
+├── tests/                   # Synthetic data generator and validation
+├── requirements.txt
+└── README.md
