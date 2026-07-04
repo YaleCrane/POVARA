@@ -1,18 +1,48 @@
 """
-Bayesian hierarchical model to predict expected costs for purchase orders
+POVARA Bayesian Anomaly Detection Model
 
-to active environment, go to root and do:
+This module builds a hierarchical Bayesian model to estimate expected purchase
 
-source .venv/bin/activate
+order costs by vendor and identify statistically unusual pricing behavior.
 
-go to root and run:
-python -m src.model
+The workflow:
+
+1. Loads purchase order variance data.
+
+2. Applies audit triage rules from the pipeline.
+
+3. Fits a vendor-level Bayesian model using PyMC.
+
+4. Calculates anomaly scores and severity levels.
+
+5. Generates an audit report and dashboard visualization.
+
+Run from the project root:
+
+    source .venv/bin/activate
+
+    python -m src.model
+
+On Windows PowerShell:
+
+    .venv\\Scripts\\Activate.ps1
+
+    python -m src.model
+
+Expected input:
+
+    data/expanded_variances.csv
+
+Generated output:
+
+    data/anomaly_report.png
 """
 
 import pymc as pm
 import arviz as az
 import matplotlib.pyplot as plt
 import seaborn as sns
+from scipy.stats import norm
 
 def build_anomaly_model(df):
     
@@ -59,8 +89,10 @@ def get_anomaly_scores(trace, df):
     
     # calculate anomaly probability as percentage (more advanced than just the binary flag)
     # gives us a 0-100% confidence score that the cost is an outlier
-    from scipy.stats import norm
-    df['Anomaly_Probability'] = (1 - norm.cdf(df['Anomaly_Score'])) * 2 * 100
+
+    # Convert statistical rarity (p-value) into a human-readable confidence score
+    tail_probability = (1 - norm.cdf(df['Anomaly_Score'])) * 2
+    df['Anomaly_Confidence'] = (1 - tail_probability) * 100
     
     # add severity level for easier audit review
     def get_severity(score):
@@ -86,7 +118,7 @@ def generate_audit_report(df, silence_df):
     ml_anomalies = df[df['Is_Anomaly'] == True].sort_values('Anomaly_Score', ascending=False)
     for _, row in ml_anomalies.iterrows():
         print(f"[!] PRICING ANOMALY: PO {row['PO_#']} | {row['Component_Type']} | "
-              f"Score: {row['Anomaly_Score']:.2f} | Prob: {row['Anomaly_Probability']:.1f}% | "
+              f"Score: {row['Anomaly_Score']:.2f} | Prob: {row['Anomaly_Confidence']:.1f}% | "
               f"Severity: {row['Anomaly_Severity']}")
 
     # 2. Billing Silence
@@ -132,7 +164,7 @@ def plot_anomalies(df):
     axes[1,1].set_title('Number of Anomalies by Component Type')
     axes[1,1].set_ylabel('Count')
     
-    plt.suptitle('POVAR Sentinel — Bayesian Anomaly Detection Dashboard', 
+    plt.suptitle('POVARA: Bayesian Anomaly Detection Dashboard', 
                  fontsize=16, fontweight='bold')
     plt.tight_layout()
     
@@ -153,7 +185,6 @@ if __name__== "__main__":
 
     plot_anomalies(df)
 
-
     # 3. Statastics (Technical Sanity Check)
     print("\n--- MODEL PARAMATER SUMMARY ---")
     print(az.summary(trace))
@@ -168,7 +199,7 @@ if __name__== "__main__":
 
     if not to_review.empty:
         print(to_review[['PO_#', 'Vendor_#', 'Component_Type', 
-                         'Anomaly_Score', 'Anomaly_Probability', 
+                         'Anomaly_Score', 'Anomaly_Confidence', 
                          'Anomaly_Severity', 'Is_Anomaly']])
     else:
         print("No high-risk anomalies found")
