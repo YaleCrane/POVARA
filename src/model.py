@@ -38,7 +38,7 @@ import sys
 # fallback to the pure Python/NumPy backend.
 if sys.platform == "win32":
     os.environ["PYTENSOR_FLAGS"] = "cxx="
-    
+
 import pymc as pm
 import arviz as az
 import matplotlib.pyplot as plt
@@ -110,7 +110,6 @@ def get_anomaly_scores(trace, df):
 
     return df
 
-
 # generate audit_report
 def generate_audit_report(df, silence_df):
     print("\n--- AUDIT REPORT ---")
@@ -122,7 +121,7 @@ def generate_audit_report(df, silence_df):
               f"Score: {row['Anomaly_Score']:.2f} | Prob: {row['Anomaly_Confidence']:.1f}% | "
               f"Severity: {row['Anomaly_Severity']}")
 
-    # 2. Billing Silence
+    # 2. Billing Silence (If invoice 14+ days late)
     silence_anomalies = silence_df[silence_df['Is_Billing_Silence'] == True]
     for _, row in silence_anomalies.iterrows():
         print(f"[!] BILLING SILENCE: PO {row['PO_#']} | Open for {row['Days_Open']} days.")
