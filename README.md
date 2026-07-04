@@ -73,11 +73,19 @@ python -m src.model
 ### For Windows OS
 
 ~~~Command Line
+# Clone repository
 git clone [https://github.com/YaleCrane/POVARA.git](https://github.com/YaleCrane/POVARA.git)
 cd POVARA
+
+# Setup environment
 python -m venv .venv
 .venv\Scripts\activate
+
 pip install -r requirements.txt
+
+# Generate test data
 python -m tests.generate_test_data --generate
+
+# Run full analysis
 python -m src.model
 ~~~
