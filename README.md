@@ -1,12 +1,12 @@
-# POVAR Sentinel: Automated Purchase Order Variance Audit & Anomaly Detection
+# POVAR: Purchase Order Variance Reconciliation
 
-**POVAR Sentinel** is a hybrid audit automation system that streamlines the reconciliation of high-volume procurement transactions. It combines intelligent rule-based financial controls with probabilistic Bayesian modeling to detect pricing anomalies, auto-reconcile low-risk items, and identify operational bottlenecks.
+**POVAR**, short for **Purchase Order Variance Reconciliation**, is a hybrid audit automation system that streamlines the reconciliation of high-volume procurement transactions. It combines intelligent rule-based financial controls with probabilistic Bayesian modeling to detect pricing anomalies, auto-reconcile low-risk items, and identify operational bottlenecks.
 
 By significantly reducing manual review workload while preserving audit integrity, POVAR demonstrates a practical, real-world application of data science in financial controls and procurement operations.
 
 ## Key Features
 
-- **Dual Materiality Triage**: Automatically reconciles low-risk transactions using **both absolute (±$250) and relative (5%) variance thresholds** — mirroring real-world audit practices to effectively filter noise while prioritizing high-impact items.
+- **Dual Materiality Triage**: Automatically reconciles low-risk transactions using **both absolute (±$250) and relative (5%) variance thresholds**, mirroring real-world audit practices to effectively filter noise while prioritizing high-impact items.
 - **Hierarchical Bayesian Anomaly Detection**: Built with PyMC to learn vendor-specific pricing behaviors and flag statistically significant outliers (Z-score > 2.0).
 - **Billing Silence Monitoring**: Detects stalled or missing invoices with configurable operational thresholds.
 - **Data Quality Gate**: Enforces strict schema validation and comprehensive audit logging.
@@ -39,17 +39,18 @@ The visualization below showcases:
 
 ## Project Structure
 
-```text
+~~~text
 POVAR/
 ├── data/                    # Datasets and generated visualizations
 ├── src/                     # Core pipeline, Bayesian model, and reporting
 ├── tests/                   # Synthetic data generator and validation
 ├── requirements.txt
 └── README.md
+~~~
 
 ## Quick Start
 
-```bash
+~~~bash
 # Clone repository
 git clone https://github.com/YaleCrane/POVAR.git
 cd POVAR
@@ -65,3 +66,4 @@ python -m tests.generate_test_data --generate
 
 # Run full analysis
 python -m src.model
+~~~
