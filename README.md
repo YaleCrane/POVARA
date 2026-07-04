@@ -50,6 +50,8 @@ POVARA/
 
 ## Quick Start
 
+### For macOS / Linux
+
 ~~~bash
 # Clone repository
 git clone https://github.com/YaleCrane/POVARA.git
@@ -65,5 +67,17 @@ pip install -r requirements.txt
 python -m tests.generate_test_data --generate
 
 # Run full analysis
+python -m src.model
+~~~
+
+### For Windows OS
+
+~~~Command Line
+git clone [https://github.com/YaleCrane/POVARA.git](https://github.com/YaleCrane/POVARA.git)
+cd POVARA
+python -m venv .venv
+.venv\Scripts\activate
+pip install -r requirements.txt
+python -m tests.generate_test_data --generate
 python -m src.model
 ~~~

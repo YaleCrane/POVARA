@@ -25,7 +25,7 @@ Run from the project root:
 
 On Windows PowerShell:
 
-    .venv\\Scripts\\Activate.ps1
+    .venv\Scripts\Activate
 
     python -m src.model
 
@@ -36,8 +36,12 @@ Expected input:
 Generated output:
 
     data/anomaly_report.png
-"""
+# """
 
+import os
+import sys
+if sys.platform == "win32":
+    os.environ["PYTENSOR_FLAGS"] = "cxx="
 import pymc as pm
 import arviz as az
 import matplotlib.pyplot as plt
