@@ -1,8 +1,8 @@
-# POVAR: Purchase Order Variance Reconciliation
+# POVARA: Purchase Order Variance Reconciliation Auditor
 
-**POVAR**, short for **Purchase Order Variance Reconciliation**, is a hybrid audit automation system that streamlines the reconciliation of high-volume procurement transactions. It combines intelligent rule-based financial controls with probabilistic Bayesian modeling to detect pricing anomalies, auto-reconcile low-risk items, and identify operational bottlenecks.
+**POVARA**, short for **Purchase Order Variance Reconciliation Auditor**, is a hybrid audit automation system that streamlines the reconciliation of high-volume procurement transactions. It combines intelligent rule-based financial controls with probabilistic Bayesian modeling to detect pricing anomalies, auto-reconcile low-risk items, and identify operational bottlenecks.
 
-By significantly reducing manual review workload while preserving audit integrity, POVAR demonstrates a practical, real-world application of data science in financial controls and procurement operations.
+By significantly reducing manual review workload while preserving audit integrity, POVARA demonstrates a practical, real-world application of data science in financial controls and procurement operations.
 
 ## Key Features
 
@@ -35,12 +35,12 @@ The visualization below showcases:
 - Anomaly score distribution and severity
 - Breakdown by component type
 
-![POVAR Analytics Dashboard](data/anomaly_report.png)
+![POVARA Analytics Dashboard](data/anomaly_report.png)
 
 ## Project Structure
 
 ~~~text
-POVAR/
+POVARA/
 ├── data/                    # Datasets and generated visualizations
 ├── src/                     # Core pipeline, Bayesian model, and reporting
 ├── tests/                   # Synthetic data generator and validation
@@ -52,8 +52,8 @@ POVAR/
 
 ~~~bash
 # Clone repository
-git clone https://github.com/YaleCrane/POVAR.git
-cd POVAR
+git clone https://github.com/YaleCrane/POVARA.git
+cd POVARA
 
 # Setup environment
 python -m venv .venv
