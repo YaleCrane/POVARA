@@ -1,6 +1,29 @@
 """
-go to root and run:
-python -m src.pipeline.py
+
+POVAR Data Preparation Pipeline
+
+This module supports the Bayesian anomaly detection model by loading purchase
+
+order variance data, validating the input schema, and engineering audit-focused
+
+features used downstream by model.py.
+
+Core responsibilities:
+
+- Load raw PO variance data from CSV
+
+- Validate required transactional fields
+
+- Engineer invoice lag, variance amount, and expected-zero cost indicators
+
+- Apply audit triage rules for tolerance and materiality
+
+- Identify uninvoiced receipt lines that may indicate billing silence
+
+This module is primarily intended to be imported by model.py or other downstream
+
+analysis workflows.
+
 """
 
 import pandas as pd
@@ -30,7 +53,6 @@ def load_povar_data(file_path: str) -> pd.DataFrame:
             raise ValueError(f"Schema mismatch. Missing required columns.")
             
         # Basic data integrity: drop rows missing core cost/receipt identifiers
-        initial_count = len(df)
         df = df.dropna(subset=['Expected_Cost', 'Actual_Cost', 'Receipt_Date'])
         
         # 1. Invoice_Lag_Days: Helps model distinguish between 'pending' and 'delayed'
@@ -84,7 +106,6 @@ def find_billing_silence(df: pd.DataFrame, threshold_days: int = 14) -> pd.DataF
     open_lines = df[df['Invoice_Date'].isna()].copy()
 
     # calculate days since receipt
-    # today = pd.Timestamp('2026-07-03')
     today = pd.Timestamp.now()
 
     open_lines['Days_Open'] = (today - open_lines['Receipt_Date']).dt.days
@@ -94,10 +115,12 @@ def find_billing_silence(df: pd.DataFrame, threshold_days: int = 14) -> pd.DataF
 
     return open_lines
 
-if __name__ == "__main__":
-    # Test block to verify pipeline
-    try:
-        data = load_povar_data('data/raw_variances.csv')
-        print(data.head())
-    except Exception as e:
-        print(f"Test failed: {e}")
+# Below was for running pipeline tests, not used in main program.
+
+# if __name__ == "__main__":
+#     # Test block to verify pipeline
+#     try:
+#         data = load_povar_data('data/raw_variances.csv')
+#         print(data.head())
+#     except Exception as e:
+#         print(f"Test failed: {e}")

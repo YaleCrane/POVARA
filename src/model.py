@@ -19,29 +19,26 @@ The workflow:
 
 Run from the project root:
 
-    source .venv/bin/activate
-
     python -m src.model
-
-On Windows PowerShell:
-
-    .venv\Scripts\Activate
-
-    python -m src.model
-
-Expected input:
-
-    data/expanded_variances.csv
 
 Generated output:
 
     data/anomaly_report.png
+
 # """
 
 import os
 import sys
+
+# --- Windows Compatibility Safeguard ---
+# PyTensor attempts to compile C++ code by default to accelerate Bayesian sampling.
+# Because standard Windows environments lack the required 64-bit C++ toolchains, 
+# this causes a fatal compilation crash. If the OS is Windows ("win32"), we set 
+# the 'cxx' flag to empty, forcing PyTensor to bypass C-compilation and safely 
+# fallback to the pure Python/NumPy backend.
 if sys.platform == "win32":
     os.environ["PYTENSOR_FLAGS"] = "cxx="
+    
 import pymc as pm
 import arviz as az
 import matplotlib.pyplot as plt

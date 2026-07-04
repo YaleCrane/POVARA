@@ -1,8 +1,13 @@
 """
-generate synthetic data for testing
+Generate synthetic data for testing
 
-run in root:
-python -m tests.generate_test_data --generate
+Run from the project root:
+
+    python -m tests.generate_test_data --generate
+
+Generated output:
+
+    data/expanded_variances.csv
 
 """
 
