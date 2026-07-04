@@ -7,7 +7,6 @@ source .venv/bin/activate
 
 go to root and run:
 python -m src.model
-
 """
 
 import pymc as pm
@@ -94,27 +93,6 @@ def generate_audit_report(df, silence_df):
     silence_anomalies = silence_df[silence_df['Is_Billing_Silence'] == True]
     for _, row in silence_anomalies.iterrows():
         print(f"[!] BILLING SILENCE: PO {row['PO_#']} | Open for {row['Days_Open']} days.")
-
-# visualizer
-# def plot_anomalies(df, vendor_names):
-#     plt.figure(figsize=(14, 8))
-    
-#     # Facet by Component_Type for better insight
-#     g = sns.catplot(
-#         data=df, x='Vendor_#', y='Actual_Cost', 
-#         hue='Is_Anomaly', col='Component_Type',
-#         palette={True: 'red', False: 'blue'},
-#         kind='strip', jitter=True, alpha=0.8,
-#         height=5, aspect=1.2, s=8
-#     )
-    
-#     g.set_axis_labels("Vendor", "Actual Cost ($)")
-#     g.set_titles("{col_name}")
-#     g.fig.suptitle("POVAR: Vendor Cost Distributions & Detected Anomalies", y=1.02)
-    
-#     # Add horizontal lines for vendor means if desired
-#     plt.savefig('data/anomaly_report.png', dpi=300, bbox_inches='tight')
-#     print("\n[!] Enhanced visualization saved to 'data/anomaly_report.png'")
 
 def plot_anomalies(df):
     """Professional dashboard visualization including materiality threshold"""

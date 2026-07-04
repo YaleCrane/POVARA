@@ -94,9 +94,6 @@ def find_billing_silence(df: pd.DataFrame, threshold_days: int = 14) -> pd.DataF
 
     return open_lines
 
-
-
-
 if __name__ == "__main__":
     # Test block to verify pipeline
     try:

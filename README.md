@@ -51,7 +51,7 @@ POVAR/
 
 ```bash
 # Clone repository
-git clone <your-repo-url>
+git clone https://github.com/YaleCrane/POVAR.git
 cd POVAR
 
 # Setup environment
