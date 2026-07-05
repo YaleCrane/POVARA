@@ -25,7 +25,7 @@ Generated output:
 
     data/anomaly_report.png
 
-# """
+"""
 
 import os
 import sys
@@ -36,6 +36,7 @@ import sys
 # this causes a fatal compilation crash. If the OS is Windows ("win32"), we set 
 # the 'cxx' flag to empty, forcing PyTensor to bypass C-compilation and safely 
 # fallback to the pure Python/NumPy backend.
+
 if sys.platform == "win32":
     os.environ["PYTENSOR_FLAGS"] = "cxx="
 
@@ -82,7 +83,6 @@ def get_anomaly_scores(trace, df):
 
     # calculate the Z-Score: How many 'sigmas' aways from the mean is this PO?
     df = df.copy()  
-    
     df['Anomaly_Score'] = (df['Actual_Cost'] - learned_mu).abs() / learned_sigma
 
     # If score is > 2 std deviations away, it's an anomaly

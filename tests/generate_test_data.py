@@ -1,5 +1,5 @@
 """
-Generate synthetic data for testing
+Generate synthetic purchase order data for testing
 
 Run from the project root:
 
@@ -16,16 +16,23 @@ import numpy as np
 import os
 
 def generate_test_data(n=100):
-
-    # imported OS to be able to send to your target
-    # send test csv here:
+    """
+    Constructs a synthetic dataset of purchase orders with randomized costs, 
+    receipt dates, and intentional missing invoices for audit testing.
+    """
+    
+    # resolve project root dynamically to ensure cross-platform execution
     root_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
     output_dir = os.path.join(root_dir, 'data')
     os.makedirs(output_dir, exist_ok=True)
 
+    # Vendors
     vendors = ['V101', 'V102', 'V103', 'V104']
-    components = ['Raw Material', 'Freight', 'Demurrage', 'Bundled_Material_Freight']
     
+    # Invoiced Components
+    components = ['Raw Material', 'Freight', 'Demurrage', 'Bundled_Material_Freight']
+  
+    # PO attributes
     data = {
         'PO_#': [f'PO{1000+i}' for i in range(n)],
         'Vendor_#': np.random.choice(vendors, n),
@@ -34,6 +41,7 @@ def generate_test_data(n=100):
         'Actual_Cost': np.round(np.random.uniform(100, 2000, n),2),
         'Receipt_Date': pd.to_datetime('2026-06-01') + pd.to_timedelta(np.random.randint(0, 30, n), unit='D')
     }
+    
     # Randomly introduce missing invoices
     df = pd.DataFrame(data)
     df.loc[::10, 'Invoice_Date'] = np.nan # Simulate silence
