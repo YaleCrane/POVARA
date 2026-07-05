@@ -1,5 +1,4 @@
 """
-
 POVAR Data Preparation Pipeline
 
 This module supports the Bayesian anomaly detection model by loading purchase
@@ -25,7 +24,6 @@ This module is primarily intended to be imported by model.py or other downstream
 analysis workflows.
 
 """
-
 import pandas as pd
 import logging
 import numpy as np

@@ -61,9 +61,10 @@ def build_anomaly_model(df):
         vendor_mu = pm.Normal('vendor_mu', mu= df['Expected_Cost'].mean(), sigma = 100, shape=num_vendors)
         vendor_sigma = pm.HalfNormal('vendor_sigma', sigma = 50, shape=num_vendors)
 
+        # LIKELIHOOD: Condition the model on our observed actual costs.
         y_obs = pm.Normal('y_obs', mu=vendor_mu[vendor_index], sigma=vendor_sigma[vendor_index], observed=df['Actual_Cost'])
 
-        # Inference
+        # INFERENCE: Generate posterior distributions via MCMC sampling.
         trace = pm.sample(1000, return_inferencedata=True, target_accept=0.9)
 
     return trace, vendors.cat.categories
