@@ -44,6 +44,9 @@ import pymc as pm
 import arviz as az
 import matplotlib.pyplot as plt
 import seaborn as sns
+import pandas as pd
+
+from src.pipeline import load_povar_data, triage_audit, find_billing_silence
 from scipy.stats import norm
 
 def build_anomaly_model(df):
@@ -129,8 +132,6 @@ def generate_audit_report(df, silence_df):
 
 def plot_anomalies(df):
     """Professional dashboard visualization including materiality threshold"""
-    import seaborn as sns
-    import matplotlib.pyplot as plt
     
     sns.set_style("whitegrid")
     fig, axes = plt.subplots(2, 2, figsize=(16, 11))
@@ -173,8 +174,6 @@ def plot_anomalies(df):
     print("[!] High-resolution dashboard saved to 'data/anomaly_report.png'")
 
 if __name__== "__main__":
-    import pandas as pd
-    from src.pipeline import load_povar_data, triage_audit, find_billing_silence
 
     # 1. Load the Triage to filter data
     df = load_povar_data('data/expanded_variances.csv')
